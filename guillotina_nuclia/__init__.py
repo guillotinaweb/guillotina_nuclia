@@ -18,10 +18,9 @@ app_settings = {
 
 
 def includeme(root, settings):
-    configure.scan("guillotina_audit.install")
-    configure.scan("guillotina_audit.utility")
-    configure.scan("guillotina_audit.subscriber")
-    configure.scan("guillotina_audit.api")
-    configure.scan("guillotina_audit.permissions")
-    configure.scan("guillotina_audit.models")
-    configure.scan("guillotina_audit.parser")
+    configure.scan("guillotina_nuclia.install")
+    configure.scan("guillotina_nuclia.utility")
+    configure.scan("guillotina_nuclia.api")
+    configure.scan("guillotina_nuclia.content")
+    configure.scan("guillotina_nuclia.interfaces")
+    configure.scan("guillotina_nuclia.permissions")

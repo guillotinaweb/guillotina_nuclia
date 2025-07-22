@@ -11,6 +11,7 @@ test_requires = [
     "pytest-cov",
     "pytest-docker-fixtures[pg]>=1.3.0",
     "docker",
+    "aiohttp>=3.0.0,<4.0.0",
 ]
 
 
@@ -34,7 +35,7 @@ setup(
     setup_requires=["pytest-runner"],
     zip_safe=True,
     include_package_data=True,
-    package_data={"": ["*.txt", "*.rst"], "guillotina_audit": ["py.typed"]},
+    package_data={"": ["*.txt", "*.rst"], "guillotina_nuclia": ["py.typed"]},
     packages=find_packages(exclude=["ez_setup"]),
     install_requires=["guillotina>=7.0.0", "nuclia>=4.9.5"],
     tests_require=test_requires,
