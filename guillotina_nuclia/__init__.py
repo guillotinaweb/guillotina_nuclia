@@ -6,7 +6,7 @@ app_settings = {
     "load_utilities": {
         "nuclia": {
             "provides": "guillotina_nuclia.utility.INucliaUtility",
-            "factory": "guillotina_nuclia.utility.NucliatUtility",
+            "factory": "guillotina_nuclia.utility.NucliaUtility",
             "settings": {
                 "generative_model": os.environ.get("GENERATIVE_MODEL", "chatgpt4o"),
                 "nua_key": os.environ.get("NUA_KEY"),

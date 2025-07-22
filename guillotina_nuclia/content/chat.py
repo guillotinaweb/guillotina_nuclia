@@ -1,5 +1,5 @@
 from guillotina import configure
-from guillotina_nuclia.interfaces import IChat, IChats
+from guillotina_nuclia.interfaces.chat import IChat, IChats
 from guillotina.content import Item, Folder
 
 
