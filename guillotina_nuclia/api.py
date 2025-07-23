@@ -46,22 +46,6 @@ class PredictChat(Service):
     name="@NucliaAsk",
     summary="Get a response",
     responses={"200": {"description": "Get a response", "schema": {"properties": {}}}},
-    requestBody={
-        "required": True,
-        "content": {
-            "application/json": {
-                "schema": {
-                    "properties": {
-                        "question": {
-                            "type": "string",
-                            "description": "Question",
-                            "required": True,
-                        },
-                    }
-                }
-            }
-        },
-    },
 )
 class Ask(Service):
     async def __call__(self):
@@ -77,22 +61,6 @@ class Ask(Service):
     name="@NucliaSearch",
     summary="Get a response",
     responses={"200": {"description": "Get a response", "schema": {"properties": {}}}},
-    requestBody={
-        "required": True,
-        "content": {
-            "application/json": {
-                "schema": {
-                    "properties": {
-                        "question": {
-                            "type": "string",
-                            "description": "Question",
-                            "required": True,
-                        },
-                    }
-                }
-            }
-        },
-    },
 )
 class Search(Service):
     async def __call__(self):
@@ -108,22 +76,6 @@ class Search(Service):
     name="@NucliaFind",
     summary="Get a response",
     responses={"200": {"description": "Get a response", "schema": {"properties": {}}}},
-    requestBody={
-        "required": True,
-        "content": {
-            "application/json": {
-                "schema": {
-                    "properties": {
-                        "question": {
-                            "type": "string",
-                            "description": "Question",
-                            "required": True,
-                        },
-                    }
-                }
-            }
-        },
-    },
 )
 class Find(Service):
     async def __call__(self):
