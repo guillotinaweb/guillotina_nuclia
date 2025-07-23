@@ -1,5 +1,6 @@
-import os
 from guillotina import configure
+
+import os
 
 
 app_settings = {

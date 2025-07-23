@@ -1,6 +1,8 @@
 from guillotina import configure
-from guillotina_nuclia.interfaces.chat import IChat, IChats
-from guillotina.content import Item, Folder
+from guillotina.content import Folder
+from guillotina.content import Item
+from guillotina_nuclia.interfaces.chat import IChat
+from guillotina_nuclia.interfaces.chat import IChats
 
 
 @configure.contenttype(

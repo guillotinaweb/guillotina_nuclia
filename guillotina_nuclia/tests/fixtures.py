@@ -1,6 +1,4 @@
 from guillotina import testing
-from guillotina.component import query_utility
-from guillotina.tests.fixtures import _update_from_pytest_markers
 
 import json
 import os

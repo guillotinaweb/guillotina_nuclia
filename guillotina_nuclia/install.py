@@ -2,7 +2,8 @@ from guillotina import configure
 from guillotina.addons import Addon
 from guillotina.content import create_content_in_container
 from guillotina.event import notify
-from guillotina.events import ObjectAddedEvent, ObjectRemovedEvent
+from guillotina.events import ObjectAddedEvent
+from guillotina.events import ObjectRemovedEvent
 from guillotina.utils import get_authenticated_user_id
 
 
