@@ -36,7 +36,7 @@ jobs:
       # Run tests
       - name: Run tests
         env:
-          NUA_KEY: ${{ secrets.NUAKEY }}
+          NUA_KEY: ${{ secrets.NUA_KEY }}
           KBID: ${{ secrets.KBID }}
           APIKEY: ${{ secrets.APIKEY }}
         run: |
