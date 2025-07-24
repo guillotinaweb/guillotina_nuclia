@@ -35,6 +35,10 @@ jobs:
           
       # Run tests
       - name: Run tests
+        env:
+          NUA_KEY: ${{ secrets.NUAKEY }}
+          KBID: ${{ secrets.KBID }}
+          APIKEY: ${{ secrets.APIKEY }}
         run: |
           # Install package with test dependecies
           pip install -e .[test]
