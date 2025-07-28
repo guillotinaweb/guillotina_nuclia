@@ -24,6 +24,9 @@ class NucliaUtility:
         self._predict = sdk.AsyncNucliaPredict()
         self._upload = sdk.AsyncNucliaUpload()
         self._search = sdk.AsyncNucliaSearch()
+        self._base_url_kb = (
+            "https://europe-1.nuclia.cloud/api/v1/kb/" + self._settings["kbid"]
+        )
 
     async def initialize(self, app):
         try:
@@ -33,6 +36,8 @@ class NucliaUtility:
 
     async def auth(self):
         client_id = await self._nuclia_auth.nua(token=self._settings["nua_key"])
+        kbid = await self._nuclia_auth.kb(self._base_url_kb, self._settings["apikey"])
+        self._nuclia_auth._config.set_default_kb(kbid)
         self._nuclia_auth._config.set_default_nua(client_id)
 
     async def upload(self, file_path: str):
