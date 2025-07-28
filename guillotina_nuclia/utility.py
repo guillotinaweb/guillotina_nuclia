@@ -84,3 +84,8 @@ class NucliaUtility:
     async def find(self, question: str, filters: list = []):
         response = await self._search.find(query=question, filters=filters)
         return response.resources
+
+    async def ask_stream(self, question: str):
+        async for line in self._search.ask_stream(query=question):
+            if line.item.type == "answer":
+                yield line.item.text.encode()

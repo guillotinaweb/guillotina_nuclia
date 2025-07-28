@@ -24,7 +24,7 @@ async def test_addon(guillotina):
 
 # Tetsing needs NUA key
 async def test_api(guillotina):
-    await asyncio.sleep(10)
+    await asyncio.sleep(5)
     response, status = await guillotina(
         "POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"})
     )
@@ -68,6 +68,12 @@ async def test_api(guillotina):
     )
     assert status == 200
     assert response == "Not enough data to answer this."
+
+    response, status = await guillotina(
+        "GET", "/db/guillotina/@NucliaAskStream?question=Foo question"
+    )
+    assert status == 200
+    assert response == b"Not enough data to answer this."
 
     response, status = await guillotina(
         "GET", "/db/guillotina/@NucliaSearch?question=Foo question"
