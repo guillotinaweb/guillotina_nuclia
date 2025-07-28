@@ -1,4 +1,4 @@
-1.0.2 (unreleased)
+1.0.2 (2025-07-28)
 ------------------
 
 - Fixing TypeError: can only concatenate str when kbid is not passed
