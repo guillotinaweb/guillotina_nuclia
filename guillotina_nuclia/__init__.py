@@ -12,7 +12,7 @@ app_settings = {
                 "generative_model": os.environ.get("GENERATIVE_MODEL", "chatgpt4o"),
                 "nua_key": os.environ.get("NUA_KEY"),
                 "max_tokens": os.environ.get("MAX_TOKENS"),
-                "kbid": os.environ.get("KBID"),
+                "kbid": os.environ.get("KBID", ""),
                 "apikey": os.environ.get("APIKEY"),
             },
         }

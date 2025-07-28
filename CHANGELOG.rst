@@ -1,7 +1,8 @@
 1.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixing TypeError: can only concatenate str when kbid is not passed
+  [nilbacardit26]
 
 
 1.0.1 (2025-07-28)

@@ -24,9 +24,8 @@ class NucliaUtility:
         self._predict = sdk.AsyncNucliaPredict()
         self._upload = sdk.AsyncNucliaUpload()
         self._search = sdk.AsyncNucliaSearch()
-        self._base_url_kb = (
-            "https://europe-1.nuclia.cloud/api/v1/kb/" + self._settings["kbid"]
-        )
+        kbid = self._settings["kbid"] or ""
+        self._base_url_kb = "https://europe-1.nuclia.cloud/api/v1/kb/" + kbid
 
     async def initialize(self, app):
         try:
