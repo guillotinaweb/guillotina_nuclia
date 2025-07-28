@@ -4,6 +4,7 @@ from guillotina.component import query_utility
 from guillotina.interfaces import IContainer
 from guillotina_nuclia.interfaces.chat import IChat
 from guillotina_nuclia.utility import INucliaUtility
+from guillotina.response import Response
 
 
 @configure.service(
@@ -52,6 +53,34 @@ class Ask(Service):
         nuclia_utility = query_utility(INucliaUtility)
         question = self.request.query.get("question")
         return await nuclia_utility.ask(question=question)
+
+
+@configure.service(
+    context=IContainer,
+    method="GET",
+    permission="nuclia.Ask",
+    name="@NucliaAskStream",
+    summary="Get a response",
+    responses={"200": {"description": "Get a response", "schema": {"properties": {}}}},
+)
+class AskStream(Service):
+    async def __call__(self):
+        nuclia_utility = query_utility(INucliaUtility)
+        question = self.request.query.get("question")
+        resp = Response(
+            status=200,
+            headers={
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Expose-Headers": "*",
+            },
+        )
+        resp.content_type = "text/plain"
+        await resp.prepare(self.request)
+        async for line in nuclia_utility.ask_stream(question=question):
+            await resp.write(line)
+        await resp.write(eof=True)
+        return resp
 
 
 @configure.service(

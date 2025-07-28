@@ -1,5 +1,6 @@
 import json
 import pytest
+import asyncio
 
 
 pytestmark = pytest.mark.asyncio
@@ -22,7 +23,12 @@ async def test_addon(guillotina):
 
 
 # Tetsing needs NUA key
-async def _test_api(guillotina):
+async def test_api(guillotina):
+    await asyncio.sleep(5)
+    response, status = await guillotina(
+        "POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"})
+    )
+    assert status == 200
     response, status = await guillotina(
         "POST",
         "/db/guillotina/chats",
@@ -62,6 +68,12 @@ async def _test_api(guillotina):
     )
     assert status == 200
     assert response == "Not enough data to answer this."
+
+    response, status = await guillotina(
+        "GET", "/db/guillotina/@NucliaAskStream?question=Foo question"
+    )
+    assert status == 200
+    assert response == b"Not enough data to answer this."
 
     response, status = await guillotina(
         "GET", "/db/guillotina/@NucliaSearch?question=Foo question"
