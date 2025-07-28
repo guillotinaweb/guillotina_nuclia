@@ -3,6 +3,8 @@
 
 - Fixing KBID auth
   [nilbacardit26]
+- Adding @NucliaAskStream endpoint
+  [nilbacardit26]
 
 
 1.0.0 (2025-07-23)
