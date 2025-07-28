@@ -1,3 +1,4 @@
+import asyncio
 import json
 import pytest
 
@@ -23,6 +24,7 @@ async def test_addon(guillotina):
 
 # Tetsing needs NUA key
 async def test_api(guillotina):
+    await asyncio.sleep(10)
     response, status = await guillotina(
         "POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"})
     )
