@@ -2,9 +2,9 @@ from guillotina import configure
 from guillotina.api.service import Service
 from guillotina.component import query_utility
 from guillotina.interfaces import IContainer
+from guillotina.response import Response
 from guillotina_nuclia.interfaces.chat import IChat
 from guillotina_nuclia.utility import INucliaUtility
-from guillotina.response import Response
 
 
 @configure.service(

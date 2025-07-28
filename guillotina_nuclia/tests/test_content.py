@@ -1,7 +1,6 @@
 import asyncio
 import json
 import pytest
-import asyncio
 
 
 pytestmark = pytest.mark.asyncio
