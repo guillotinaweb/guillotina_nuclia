@@ -64,25 +64,33 @@ async def test_api(guillotina):
         {"author": "NUCLIA", "text": "Not enough data to answer this."},
     ]
     response, status = await guillotina(
-        "GET", "/db/guillotina/@NucliaAsk?question=Foo question"
+        "POST",
+        "/db/guillotina/@NucliaAsk",
+        data=json.dumps({"question": "Foo question"}),
     )
     assert status == 200
     assert response == "Not enough data to answer this."
 
     response, status = await guillotina(
-        "GET", "/db/guillotina/@NucliaAskStream?question=Foo question"
+        "POST",
+        "/db/guillotina/@NucliaAskStream",
+        data=json.dumps({"question": "Foo question"}),
     )
     assert status == 200
-    assert response == b"Not enough data to answer this."
+    assert response.find(b"Not enough data to answer this.") != -1
 
     response, status = await guillotina(
-        "GET", "/db/guillotina/@NucliaSearch?question=Foo question"
+        "POST",
+        "/db/guillotina/@NucliaSearch",
+        data=json.dumps({"question": "Foo question"}),
     )
     assert status == 200
     assert response == []
 
     response, status = await guillotina(
-        "GET", "/db/guillotina/@NucliaFind?question=Foo question"
+        "POST",
+        "/db/guillotina/@NucliaFind",
+        data=json.dumps({"question": "Foo question"}),
     )
     assert status == 200
     assert len(response) == 15

@@ -1,7 +1,11 @@
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Adding retrieval response in @NucliaAskStream
+  [nilbacardit26]
+- Convert all the endpoints from GET to POST. Now the question goes to
+  the body
+  [nilbacardit26]
 
 
 1.0.2 (2025-07-28)

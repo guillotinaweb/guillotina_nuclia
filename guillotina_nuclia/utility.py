@@ -88,3 +88,5 @@ class NucliaUtility:
         async for line in self._search.ask_stream(query=question):
             if line.item.type == "answer":
                 yield line.item.text.encode()
+            elif line.item.type == "retrieval":
+                yield line.item.results.json().encode()
