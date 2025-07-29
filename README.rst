@@ -15,7 +15,8 @@ Install
 Configure the Nuclia utility
 ----------------------------
 
-Add this to the settings you pass when starting Guillotina.
+These are the settings regarding nuclia already configured in the package.
+You mostly need to set up the next env variables: NUA_KEY, APIKEY, KBID, GENERATIVE_MODEL
 
 .. code-block:: python
 
@@ -36,6 +37,11 @@ Add this to the settings you pass when starting Guillotina.
                     "nua_key": os.environ.get("NUA_KEY"),
                     # hard limit for tokens (optional)
                     "max_tokens": os.environ.get("MAX_TOKENS"),
+		    # Nuclia's API KEY
+		    "apikey": os.environ.get("APIKEY"),
+		    # Knowledge Box ID
+		    "kbid": os.environ.get("KBID", ""),
+		    
                 },
             }
         }
@@ -69,13 +75,17 @@ Export them before launching Guillotina:
 .. code-block:: bash
 
     export NUA_KEY=\"nua_pk_live_your_token_here\"
+    export KBID=\"Knwoledge box id\"
+    export API_KEY=\"Nuclia's api key\"
     export GENERATIVE_MODEL=\"chatgpt4o\"   # optional
     export MAX_TOKENS=2048                 # optional
 
 Done!
 -----
 
-Start Guillotina as usual—``INucliaUtility`` is now available everywhere and the
-built-in routes (``@NucliaAsk``, ``@NucliaSearch``, etc.) will automatically work.
+Start Guillotina as usual—``INucliaUtility`` is now available
+everywhere and the built-in routes POST (``@NucliaAsk``,
+``@NucliaFind``, ``@NucliaPredict``, ``@NucliaSearch``,
+``@NucliaAskStream``, etc.) will automatically work.
 
 ❤️  Happy coding!
