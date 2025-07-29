@@ -42,31 +42,63 @@ class PredictChat(Service):
 
 @configure.service(
     context=IContainer,
-    method="GET",
+    method="POST",
     permission="nuclia.Ask",
     name="@NucliaAsk",
     summary="Get a response",
     responses={"200": {"description": "Get a response", "schema": {"properties": {}}}},
+    requestBody={
+        "required": True,
+        "content": {
+            "application/json": {
+                "schema": {
+                    "properties": {
+                        "question": {
+                            "type": "string",
+                            "description": "Question",
+                            "required": True,
+                        },
+                    }
+                }
+            }
+        },
+    },
 )
 class Ask(Service):
     async def __call__(self):
         nuclia_utility = query_utility(INucliaUtility)
-        question = self.request.query.get("question")
-        return await nuclia_utility.ask(question=question)
+        payload = await self.request.json()
+        return await nuclia_utility.ask(question=payload["question"])
 
 
 @configure.service(
     context=IContainer,
-    method="GET",
+    method="POST",
     permission="nuclia.Ask",
     name="@NucliaAskStream",
     summary="Get a response",
     responses={"200": {"description": "Get a response", "schema": {"properties": {}}}},
+    requestBody={
+        "required": True,
+        "content": {
+            "application/json": {
+                "schema": {
+                    "properties": {
+                        "question": {
+                            "type": "string",
+                            "description": "Question",
+                            "required": True,
+                        },
+                    }
+                }
+            }
+        },
+    },
 )
 class AskStream(Service):
     async def __call__(self):
         nuclia_utility = query_utility(INucliaUtility)
-        question = self.request.query.get("question")
+        payload = await self.request.json()
         resp = Response(
             status=200,
             headers={
@@ -77,7 +109,7 @@ class AskStream(Service):
         )
         resp.content_type = "text/plain"
         await resp.prepare(self.request)
-        async for line in nuclia_utility.ask_stream(question=question):
+        async for line in nuclia_utility.ask_stream(question=payload["question"]):
             await resp.write(line)
         await resp.write(eof=True)
         return resp
@@ -85,29 +117,61 @@ class AskStream(Service):
 
 @configure.service(
     context=IContainer,
-    method="GET",
+    method="POST",
     permission="nuclia.Search",
     name="@NucliaSearch",
     summary="Get a response",
     responses={"200": {"description": "Get a response", "schema": {"properties": {}}}},
+    requestBody={
+        "required": True,
+        "content": {
+            "application/json": {
+                "schema": {
+                    "properties": {
+                        "question": {
+                            "type": "string",
+                            "description": "Question",
+                            "required": True,
+                        },
+                    }
+                }
+            }
+        },
+    },
 )
 class Search(Service):
     async def __call__(self):
         nuclia_utility = query_utility(INucliaUtility)
-        question = self.request.query.get("question")
-        return await nuclia_utility.search(question=question)
+        payload = await self.request.json()
+        return await nuclia_utility.search(question=payload["question"])
 
 
 @configure.service(
     context=IContainer,
-    method="GET",
+    method="POST",
     permission="nuclia.Find",
     name="@NucliaFind",
     summary="Get a response",
     responses={"200": {"description": "Get a response", "schema": {"properties": {}}}},
+    requestBody={
+        "required": True,
+        "content": {
+            "application/json": {
+                "schema": {
+                    "properties": {
+                        "question": {
+                            "type": "string",
+                            "description": "Question",
+                            "required": True,
+                        },
+                    }
+                }
+            }
+        },
+    },
 )
 class Find(Service):
     async def __call__(self):
         nuclia_utility = query_utility(INucliaUtility)
-        question = self.request.query.get("question")
-        return await nuclia_utility.find(question=question)
+        payload = await self.request.json()
+        return await nuclia_utility.find(question=payload["question"])
