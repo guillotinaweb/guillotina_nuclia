@@ -1,4 +1,4 @@
-1.0.3 (unreleased)
+1.0.3 (2025-07-29)
 ------------------
 
 - Adding retrieval response in @NucliaAskStream
