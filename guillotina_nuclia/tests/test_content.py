@@ -93,4 +93,11 @@ async def test_api(guillotina):
         data=json.dumps({"question": "Foo question"}),
     )
     assert status == 200
-    assert len(response) == 15
+    assert len(response) == 16
+
+    response, status = await guillotina(
+        "POST",
+        "/db/guillotina/@NucliaCatalog",
+        data=json.dumps({"query": "Foo question"}),
+    )
+    assert status == 200
