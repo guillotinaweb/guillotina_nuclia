@@ -25,7 +25,8 @@ class NucliaUtility:
         self._upload = sdk.AsyncNucliaUpload()
         self._search = sdk.AsyncNucliaSearch()
         kbid = self._settings["kbid"] or ""
-        self._base_url_kb = "https://europe-1.nuclia.cloud/api/v1/kb/" + kbid
+        api_endpoint = self._settings["api_endpoint"]
+        self._base_url_kb = f"{api_endpoint}/{kbid}"
 
     async def initialize(self, app):
         try:
@@ -76,6 +77,10 @@ class NucliaUtility:
         response = await self._search.ask(query=question)
         return response.answer.decode("utf-8")
 
+    async def ask_json(self, question: str, schema: dict):
+        response = await self._search.ask_json(query=question, schema=schema)
+        return response.answer.decode("utf-8")
+
     async def search(self, question: str, filters: list = []):
         response = await self._search.search(query=question, filters=filters)
         return response.fulltext.results
@@ -90,3 +95,6 @@ class NucliaUtility:
                 yield line.item.text.encode()
             elif line.item.type == "retrieval":
                 yield line.item.results.json().encode()
+
+    async def catalog(self, query):
+        return await self._search.catalog(query=query)

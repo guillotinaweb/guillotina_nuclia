@@ -1,7 +1,8 @@
 1.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Changing API Endpoint to progress, and adding API_ENDPOINT env
+  variable to be able to customize it
 
 
 1.0.3 (2025-07-29)

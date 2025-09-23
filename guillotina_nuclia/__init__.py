@@ -14,6 +14,9 @@ app_settings = {
                 "max_tokens": os.environ.get("MAX_TOKENS"),
                 "kbid": os.environ.get("KBID", ""),
                 "apikey": os.environ.get("APIKEY"),
+                "api_endpoint": os.environ.get(
+                    "API_ENDPOINT", "https://europe-1.rag.progress.cloud/api/v1/kb"
+                ),
             },
         }
     }
