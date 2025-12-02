@@ -5,6 +5,23 @@ from guillotina.utils import get_authenticated_user_id
 from guillotina_nuclia.interfaces.chat import IChat
 from nuclia import sdk
 from nuclia.lib.nua_responses import ChatModel
+from nuclia_models.common.consumption import Consumption
+from nuclia_models.predict.generative_responses import CitationsGenerativeResponse
+from nuclia_models.predict.generative_responses import ConsumptionGenerative
+from nuclia_models.predict.generative_responses import (
+    FootnoteCitationsGenerativeResponse,
+)
+from nuclia_models.predict.generative_responses import GenerativeChunk
+from nuclia_models.predict.generative_responses import GenerativeFullResponse
+from nuclia_models.predict.generative_responses import JSONGenerativeResponse
+from nuclia_models.predict.generative_responses import MetaGenerativeResponse
+from nuclia_models.predict.generative_responses import ReasoningGenerativeResponse
+from nuclia_models.predict.generative_responses import StatusGenerativeResponse
+from nuclia_models.predict.generative_responses import TextGenerativeResponse
+from nuclia_models.predict.generative_responses import ToolsGenerativeResponse
+from typing import AsyncIterator
+from typing import List
+from typing import Optional
 
 import logging
 
@@ -73,6 +90,67 @@ class NucliaUtility:
         )
         return response
 
+    async def predict_chat_history(
+        self,
+        question: str,
+        history: Optional[list] = None,
+        context: Optional[list] = None,
+    ):
+        try:
+            user = get_authenticated_user_id()
+        except Exception:
+            user = "UNKNOWN"
+        generative_model = self._settings.get("generative_model", "chatgpt4o")
+        max_tokens = self._settings.get("max_tokens", 4096)
+
+        chat_model = ChatModel(
+            question=question,
+            query_context=context or [],
+            chat_history=history or [],
+            user_id=user,
+            generative_model=generative_model,
+            max_tokens=max_tokens,
+        )
+        return await self._predict.generate(text=chat_model)
+
+    async def predict_chat_history_stream(
+        self,
+        question: str,
+        history: Optional[List[dict]] = None,
+        context: Optional[List[str]] = None,
+    ) -> AsyncIterator[object]:
+        try:
+            user = get_authenticated_user_id()
+        except Exception:
+            user = "UNKNOWN"
+        generative_model = self._settings.get("generative_model", "chatgpt4o")
+        max_tokens = self._settings.get("max_tokens", 4096)
+
+        chat_model = ChatModel(
+            question=question,
+            query_context=context or [],
+            chat_history=history or [],
+            user_id=user,
+            generative_model=generative_model,
+            max_tokens=max_tokens,
+        )
+        stream_result = GenerativeFullResponse(answer="")
+
+        async def _stream():
+            async for chunk in self._predict.generate_stream(text=chat_model):
+                chunk_text = self._extract_stream_text(chunk)
+                if chunk_text:
+                    yield chunk_text
+                else:
+                    self._accumulate_stream_chunk(chunk, stream_result)
+            response_payload = stream_result.model_dump()
+            yield {
+                "type": "end",
+                "response": response_payload,
+            }
+
+        return _stream()
+
     async def ask(self, question: str):
         response = await self._search.ask(query=question)
         return response.answer.decode("utf-8")
@@ -98,3 +176,38 @@ class NucliaUtility:
 
     async def catalog(self, query):
         return await self._search.catalog(query=query)
+
+    @staticmethod
+    def _extract_stream_text(chunk: GenerativeChunk) -> Optional[str]:
+        if isinstance(chunk.chunk, TextGenerativeResponse):
+            return chunk.chunk.text
+        return None
+
+    @staticmethod
+    def _accumulate_stream_chunk(
+        chunk: GenerativeChunk, stream_result: GenerativeFullResponse
+    ) -> None:
+        if isinstance(chunk.chunk, ReasoningGenerativeResponse):
+            stream_result.reasoning = (stream_result.reasoning or "") + chunk.chunk.text
+        elif isinstance(chunk.chunk, JSONGenerativeResponse):
+            stream_result.object = chunk.chunk.object
+        elif isinstance(chunk.chunk, MetaGenerativeResponse):
+            stream_result.input_tokens = chunk.chunk.input_tokens
+            stream_result.output_tokens = chunk.chunk.output_tokens
+            stream_result.input_nuclia_tokens = chunk.chunk.input_nuclia_tokens
+            stream_result.output_nuclia_tokens = chunk.chunk.output_nuclia_tokens
+            stream_result.timings = chunk.chunk.timings
+        elif isinstance(chunk.chunk, CitationsGenerativeResponse):
+            stream_result.citations = chunk.chunk.citations
+        elif isinstance(chunk.chunk, FootnoteCitationsGenerativeResponse):
+            stream_result.citation_footnote_to_context = chunk.chunk.footnote_to_context
+        elif isinstance(chunk.chunk, StatusGenerativeResponse):
+            stream_result.code = chunk.chunk.code
+            stream_result.details = chunk.chunk.details
+        elif isinstance(chunk.chunk, ToolsGenerativeResponse):
+            stream_result.tools = chunk.chunk.tools
+        elif isinstance(chunk.chunk, ConsumptionGenerative):
+            stream_result.consumption = Consumption(
+                normalized_tokens=chunk.chunk.normalized_tokens,
+                customer_key_tokens=chunk.chunk.customer_key_tokens,
+            )

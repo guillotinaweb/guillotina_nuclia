@@ -1,7 +1,8 @@
 1.0.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Adding stateless chat endpoints.
+  [nilbacardit26]
 
 
 1.0.4 (2025-09-23)
