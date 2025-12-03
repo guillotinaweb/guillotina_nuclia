@@ -8,9 +8,7 @@ from nuclia.lib.nua_responses import ChatModel
 from nuclia_models.common.consumption import Consumption
 from nuclia_models.predict.generative_responses import CitationsGenerativeResponse
 from nuclia_models.predict.generative_responses import ConsumptionGenerative
-from nuclia_models.predict.generative_responses import (
-    FootnoteCitationsGenerativeResponse,
-)
+from nuclia_models.predict.generative_responses import FootnoteCitationsGenerativeResponse
 from nuclia_models.predict.generative_responses import GenerativeChunk
 from nuclia_models.predict.generative_responses import GenerativeFullResponse
 from nuclia_models.predict.generative_responses import JSONGenerativeResponse
