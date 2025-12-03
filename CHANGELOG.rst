@@ -1,4 +1,4 @@
-1.0.5 (unreleased)
+1.0.5 (2025-12-03)
 ------------------
 
 - Adding stateless chat endpoints.
