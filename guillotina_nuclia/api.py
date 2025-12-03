@@ -37,9 +37,7 @@ class PredictChat(Service):
     async def __call__(self):
         nuclia_utility = query_utility(INucliaUtility)
         payload = await self.request.json()
-        return await nuclia_utility.predict_chat(
-            question=payload["question"], chat=self.context
-        )
+        return await nuclia_utility.predict_chat(question=payload["question"], chat=self.context)
 
 
 @configure.service(

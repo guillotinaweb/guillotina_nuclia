@@ -7,9 +7,7 @@ pytestmark = pytest.mark.asyncio
 
 
 async def test_addon(guillotina):
-    response, status = await guillotina(
-        "POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"})
-    )
+    response, status = await guillotina("POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"}))
     assert status == 200
     response, status = await guillotina("GET", "/db/guillotina/chats")
     assert status == 200
@@ -25,9 +23,7 @@ async def test_addon(guillotina):
 # Tetsing needs NUA key
 async def test_api(guillotina):
     await asyncio.sleep(5)
-    response, status = await guillotina(
-        "POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"})
-    )
+    response, status = await guillotina("POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"}))
     assert status == 200
     response, status = await guillotina(
         "POST",

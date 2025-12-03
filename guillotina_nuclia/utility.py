@@ -81,11 +81,7 @@ class NucliaUtility:
         chat.history.append(nuclia_message)
         chat.responses.append(response.answer)
         chat.register()
-        await notify(
-            ObjectModifiedEvent(
-                chat, payload={"history": chat.history, "responses": chat.responses}
-            )
-        )
+        await notify(ObjectModifiedEvent(chat, payload={"history": chat.history, "responses": chat.responses}))
         return response
 
     async def predict_chat_history(
@@ -182,9 +178,7 @@ class NucliaUtility:
         return None
 
     @staticmethod
-    def _accumulate_stream_chunk(
-        chunk: GenerativeChunk, stream_result: GenerativeFullResponse
-    ) -> None:
+    def _accumulate_stream_chunk(chunk: GenerativeChunk, stream_result: GenerativeFullResponse) -> None:
         if isinstance(chunk.chunk, ReasoningGenerativeResponse):
             stream_result.reasoning = (stream_result.reasoning or "") + chunk.chunk.text
         elif isinstance(chunk.chunk, JSONGenerativeResponse):
