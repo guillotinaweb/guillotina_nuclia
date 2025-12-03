@@ -22,8 +22,6 @@ testing.configure_with(base_settings_configurator)
 
 @pytest.fixture(scope="function")
 async def guillotina(guillotina):
-    response, status = await guillotina(
-        "POST", "/db/", data=json.dumps({"@type": "Container", "id": "guillotina"})
-    )
+    response, status = await guillotina("POST", "/db/", data=json.dumps({"@type": "Container", "id": "guillotina"}))
     assert status == 200
     yield guillotina

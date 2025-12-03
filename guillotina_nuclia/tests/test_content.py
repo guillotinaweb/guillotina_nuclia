@@ -7,9 +7,7 @@ pytestmark = pytest.mark.asyncio
 
 
 async def test_addon(guillotina):
-    response, status = await guillotina(
-        "POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"})
-    )
+    response, status = await guillotina("POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"}))
     assert status == 200
     response, status = await guillotina("GET", "/db/guillotina/chats")
     assert status == 200
@@ -25,9 +23,7 @@ async def test_addon(guillotina):
 # Tetsing needs NUA key
 async def test_api(guillotina):
     await asyncio.sleep(5)
-    response, status = await guillotina(
-        "POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"})
-    )
+    response, status = await guillotina("POST", "/db/guillotina/@addons", data=json.dumps({"id": "nuclia"}))
     assert status == 200
     response, status = await guillotina(
         "POST",
@@ -70,6 +66,66 @@ async def test_api(guillotina):
     )
     assert status == 200
     assert response == "Not enough data to answer this."
+
+    response, status = await guillotina(
+        "POST",
+        "/db/guillotina/@NucliaPredictStateless",
+        data=json.dumps(
+            {
+                "question": "Foo question",
+                "history": [
+                    {"author": "USER", "text": "Foo question"},
+                    {
+                        "author": "NUCLIA",
+                        "text": "Not enough data to answer this.",
+                    },
+                    {"author": "USER", "text": "Foo question 2"},
+                    {
+                        "author": "NUCLIA",
+                        "text": "Not enough data to answer this.",
+                    },
+                ],
+                "context": ["some context"],
+            }
+        ),
+    )
+    assert status == 200
+    assert response["answer"] == "Not enough data to answer this."
+    assert response["history"] == [
+        {"author": "USER", "text": "Foo question"},
+        {"author": "NUCLIA", "text": "Not enough data to answer this."},
+        {"author": "USER", "text": "Foo question 2"},
+        {"author": "NUCLIA", "text": "Not enough data to answer this."},
+        {"author": "USER", "text": "Foo question"},
+        {"author": "NUCLIA", "text": "Not enough data to answer this."},
+    ]
+    assert response["response"]["answer"] == "Not enough data to answer this."
+
+    response, status = await guillotina(
+        "POST",
+        "/db/guillotina/@NucliaPredictStatelessStream",
+        data=json.dumps(
+            {
+                "question": "Foo question",
+                "history": [
+                    {"author": "USER", "text": "Foo question"},
+                    {
+                        "author": "NUCLIA",
+                        "text": "Not enough data to answer this.",
+                    },
+                    {"author": "USER", "text": "Foo question 2"},
+                    {
+                        "author": "NUCLIA",
+                        "text": "Not enough data to answer this.",
+                    },
+                ],
+                "context": ["some context"],
+            }
+        ),
+    )
+    assert status == 200
+    assert response.startswith(b"Not enough data to answer this.")
+    assert b'"type": "end"' in response
 
     response, status = await guillotina(
         "POST",
