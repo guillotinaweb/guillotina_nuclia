@@ -62,7 +62,23 @@ async def test_api(guillotina):
     response, status = await guillotina(
         "POST",
         "/db/guillotina/@NucliaAsk",
-        data=json.dumps({"question": "Foo question"}),
+        data=json.dumps(
+            {
+                "question": "Foo question",
+                "history": [
+                    {"author": "USER", "text": "Foo question"},
+                    {
+                        "author": "NUCLIA",
+                        "text": "Not enough data to answer this.",
+                    },
+                    {"author": "USER", "text": "Foo question 2"},
+                    {
+                        "author": "NUCLIA",
+                        "text": "Not enough data to answer this.",
+                    },
+                ],
+            }
+        ),
     )
     assert status == 200
     assert response == "Not enough data to answer this."
@@ -130,7 +146,23 @@ async def test_api(guillotina):
     response, status = await guillotina(
         "POST",
         "/db/guillotina/@NucliaAskStream",
-        data=json.dumps({"question": "Foo question"}),
+        data=json.dumps(
+            {
+                "question": "Foo question",
+                "history": [
+                    {"author": "USER", "text": "Foo question"},
+                    {
+                        "author": "NUCLIA",
+                        "text": "Not enough data to answer this.",
+                    },
+                    {"author": "USER", "text": "Foo question 2"},
+                    {
+                        "author": "NUCLIA",
+                        "text": "Not enough data to answer this.",
+                    },
+                ],
+            }
+        ),
     )
     assert status == 200
     assert response.find(b"Not enough data to answer this.") != -1

@@ -17,6 +17,7 @@ from nuclia_models.predict.generative_responses import ReasoningGenerativeRespon
 from nuclia_models.predict.generative_responses import StatusGenerativeResponse
 from nuclia_models.predict.generative_responses import TextGenerativeResponse
 from nuclia_models.predict.generative_responses import ToolsGenerativeResponse
+from nucliadb_models.search import AskRequest
 from typing import AsyncIterator
 from typing import List
 from typing import Optional
@@ -145,8 +146,9 @@ class NucliaUtility:
 
         return _stream()
 
-    async def ask(self, question: str):
-        response = await self._search.ask(query=question)
+    async def ask(self, question: str, chat_history: list = []):
+        ask_request = AskRequest(query=question, chat_history=chat_history)
+        response = await self._search.ask(query=ask_request)
         return response.answer.decode("utf-8")
 
     async def ask_json(self, question: str, schema: dict):
@@ -161,8 +163,9 @@ class NucliaUtility:
         response = await self._search.find(query=question, filters=filters)
         return response.resources
 
-    async def ask_stream(self, question: str):
-        async for line in self._search.ask_stream(query=question):
+    async def ask_stream(self, question: str, chat_history: list = []):
+        ask_request = AskRequest(query=question, chat_history=chat_history)
+        async for line in self._search.ask_stream(query=ask_request):
             if line.item.type == "answer":
                 yield line.item.text.encode()
             elif line.item.type == "retrieval":

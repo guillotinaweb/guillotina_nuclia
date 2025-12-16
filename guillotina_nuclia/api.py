@@ -198,6 +198,19 @@ class PredictChatStatelessStream(Service):
                             "description": "Question",
                             "required": True,
                         },
+                        "history": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "author": {"type": "string"},
+                                    "text": {"type": "string"},
+                                },
+                                "required": ["text", "author"],
+                            },
+                            "description": "Existing chat history",
+                            "default": [],
+                        },
                     }
                 }
             }
@@ -208,7 +221,8 @@ class Ask(Service):
     async def __call__(self):
         nuclia_utility = query_utility(INucliaUtility)
         payload = await self.request.json()
-        return await nuclia_utility.ask(question=payload["question"])
+        chat_history = payload.get("history") or []
+        return await nuclia_utility.ask(question=payload["question"], chat_history=chat_history)
 
 
 @configure.service(
@@ -229,6 +243,19 @@ class Ask(Service):
                             "description": "Question",
                             "required": True,
                         },
+                        "history": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "author": {"type": "string"},
+                                    "text": {"type": "string"},
+                                },
+                                "required": ["text", "author"],
+                            },
+                            "description": "Existing chat history",
+                            "default": [],
+                        },
                     }
                 }
             }
@@ -239,6 +266,7 @@ class AskStream(Service):
     async def __call__(self):
         nuclia_utility = query_utility(INucliaUtility)
         payload = await self.request.json()
+        chat_history = payload.get("history") or []
         resp = Response(
             status=200,
             headers={
@@ -249,7 +277,7 @@ class AskStream(Service):
         )
         resp.content_type = "text/plain"
         await resp.prepare(self.request)
-        async for line in nuclia_utility.ask_stream(question=payload["question"]):
+        async for line in nuclia_utility.ask_stream(question=payload["question"], chat_history=chat_history):
             await resp.write(line)
         await resp.write(eof=True)
         return resp
