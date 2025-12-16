@@ -1,4 +1,4 @@
-1.0.6 (unreleased)
+1.0.6 (2025-12-16)
 ------------------
 
 - Adding chat history param in the body @NucliaAsk and
