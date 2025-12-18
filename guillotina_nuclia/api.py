@@ -228,11 +228,7 @@ class Ask(Service):
         payload = await self.request.json()
         chat_history = payload.get("history") or []
         configuration = payload.get("configuration")
-        return await nuclia_utility.ask(
-            question=payload["question"],
-            chat_history=chat_history,
-            configuration=configuration
-        )
+        return await nuclia_utility.ask(question=payload["question"], chat_history=chat_history, configuration=configuration)
 
 
 @configure.service(
@@ -293,10 +289,7 @@ class AskStream(Service):
         )
         resp.content_type = "text/plain"
         await resp.prepare(self.request)
-        async for line in nuclia_utility.ask_stream(
-                question=payload["question"],
-                chat_history=chat_history,
-                configuration=configuration):
+        async for line in nuclia_utility.ask_stream(question=payload["question"], chat_history=chat_history, configuration=configuration):
             await resp.write(line)
         await resp.write(eof=True)
         return resp

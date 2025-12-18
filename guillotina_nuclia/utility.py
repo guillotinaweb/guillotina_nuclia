@@ -147,11 +147,7 @@ class NucliaUtility:
         return _stream()
 
     async def ask(self, question: str, chat_history: list = [], **kwargs):
-        ask_request = AskRequest(
-            query=question,
-            chat_history=chat_history,
-            **kwargs
-        )
+        ask_request = AskRequest(query=question, chat_history=chat_history, **kwargs)
         response = await self._search.ask(query=ask_request)
         return response.answer.decode("utf-8")
 
@@ -168,11 +164,7 @@ class NucliaUtility:
         return response.resources
 
     async def ask_stream(self, question: str, chat_history: list = [], **kwargs):
-        ask_request = AskRequest(
-            query=question,
-            chat_history=chat_history,
-            **kwargs
-        )
+        ask_request = AskRequest(query=question, chat_history=chat_history, **kwargs)
         async for line in self._search.ask_stream(query=ask_request):
             if line.item.type == "answer":
                 yield line.item.text.encode()
