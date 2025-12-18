@@ -1,7 +1,9 @@
 1.0.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Configuration can be passed in the payload of the request of
+  @NucliaAsk and @NucliaAskStream.
+  [nilbacardit26]
 
 
 1.0.6 (2025-12-16)
