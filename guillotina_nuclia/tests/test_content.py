@@ -77,6 +77,7 @@ async def test_api(guillotina):
                         "text": "Not enough data to answer this.",
                     },
                 ],
+                "configuration": "prod"
             }
         ),
     )
@@ -161,6 +162,7 @@ async def test_api(guillotina):
                         "text": "Not enough data to answer this.",
                     },
                 ],
+                "configuration": "prod"
             }
         ),
     )

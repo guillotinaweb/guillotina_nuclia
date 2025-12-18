@@ -211,6 +211,11 @@ class PredictChatStatelessStream(Service):
                             "description": "Existing chat history",
                             "default": [],
                         },
+                        "configuration": {
+                            "type": "string",
+                            "description": "Search configuration",
+                            "required": False,
+                        },
                     }
                 }
             }
@@ -222,7 +227,12 @@ class Ask(Service):
         nuclia_utility = query_utility(INucliaUtility)
         payload = await self.request.json()
         chat_history = payload.get("history") or []
-        return await nuclia_utility.ask(question=payload["question"], chat_history=chat_history)
+        configuration = payload.get("configuration")
+        return await nuclia_utility.ask(
+            question=payload["question"],
+            chat_history=chat_history,
+            configuration=configuration
+        )
 
 
 @configure.service(
@@ -256,6 +266,11 @@ class Ask(Service):
                             "description": "Existing chat history",
                             "default": [],
                         },
+                        "configuration": {
+                            "type": "string",
+                            "description": "Search configuration",
+                            "required": False,
+                        },
                     }
                 }
             }
@@ -267,6 +282,7 @@ class AskStream(Service):
         nuclia_utility = query_utility(INucliaUtility)
         payload = await self.request.json()
         chat_history = payload.get("history") or []
+        configuration = payload.get("configuration")
         resp = Response(
             status=200,
             headers={
@@ -277,7 +293,10 @@ class AskStream(Service):
         )
         resp.content_type = "text/plain"
         await resp.prepare(self.request)
-        async for line in nuclia_utility.ask_stream(question=payload["question"], chat_history=chat_history):
+        async for line in nuclia_utility.ask_stream(
+                question=payload["question"],
+                chat_history=chat_history,
+                configuration=configuration):
             await resp.write(line)
         await resp.write(eof=True)
         return resp
