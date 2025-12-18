@@ -1,4 +1,4 @@
-1.0.7 (unreleased)
+1.0.7 (2025-12-18)
 ------------------
 
 - Configuration can be passed in the payload of the request of
